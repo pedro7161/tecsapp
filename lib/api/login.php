@@ -1,30 +1,32 @@
 <?php
+require "connectbase.php";
+
 function login($username, $password)
 {
-    echo "LOGGING";
-    $verifyuser = getDb()->prepare("SELECT * FROM `user` WHERE username=? OR email=?;");
-    $verifyuser->bind_param("ss", $username, $username);
+    $verifyuser = getDb()->prepare("SELECT username, pass FROM user WHERE username='?' OR email='?';");
+    $email = $username;
+    $verifyuser->bind_param('ss', $username, $email);
 
     $result = $verifyuser->execute();
 
     if (!$result) {
-        login_fail();
+        login_fail("1");
     }
 
-    $user = $verifyuser->get_result();
+    $result = $verifyuser->get_result();
 
-    if (!$user) {
-        login_fail();
+    if (!$result) {
+        login_fail("2");
     }
 
-    $user = $user->fetch_assoc();
+    $data = $result->fetch_assoc();
 
-    if (isset($user) && sizeof($user) > 0) {
-        if (password_verify($password, $user["pass"])) {
-            $_SESSION["username"] = $user["username"];
+    if ($data) {
+        if (password_verify($password, $data["pass"])) {
+            $_SESSION["username"] = $data["username"];
             login_ok();
         } else {
-            login_fail();
+            login_fail("3");
         }
     } else {
         login_fail();
@@ -34,9 +36,11 @@ function login($username, $password)
 function login_ok()
 {
     echo json_encode(array("message", "ok"));
+    exit;
 }
 
-function login_fail()
+function login_fail($code = 0)
 {
-    echo json_encode(array("message", "error trying to login"));
+    echo json_encode(array("message", "error trying to login (code $code)"));
+    exit;
 }

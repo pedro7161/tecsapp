@@ -51,6 +51,6 @@ function user_loggedin()
 //-------------------------------------------------------------------------------------------------------------
 if (isset($_GET["action"]) && $_GET["action"] == "getcontacts") {
     if (isset($_GET["term"])) {
-        getcontacts();
+        // getcontacts();
     }
 }
