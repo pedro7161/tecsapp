@@ -1,15 +1,15 @@
 <?php
 
-function getDb()
-{
-    $endservidor = "";
-    $username = "root";
-    $password = "";
+// function getDb()
+// {
+$endservidor = "";
+$username = "root";
+$password = "";
 
-    $db = new mysqli($endservidor, $username, $password, "whats");
-    if ($db->connect_error) {
-        die("Connection error:" . $db->connect_error);
-    }
-
-    return $db;
+$db = new mysqli($endservidor, $username, $password, "whats");
+if ($db->connect_error) {
+    die("Connection error:" . $db->connect_error);
 }
+
+return $db;
+// }

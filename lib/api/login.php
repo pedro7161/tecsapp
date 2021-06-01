@@ -1,46 +1,128 @@
 <?php
-require "connectbase.php";
+
 
 function login($username, $password)
 {
-    $verifyuser = getDb()->prepare("SELECT username, pass FROM user WHERE username='?' OR email='?';");
-    $email = $username;
-    $verifyuser->bind_param('ss', $username, $email);
+    require("connectbase.php");
+    //Operação de Login
+
+    //Verificação se os campos username e pass foram realmente enviados
+    echo $username;
+    // $username = $_POST["username"]; usar no functions.php para funcionar
+    // $password = $_POST["password"];
+    $verifyuser = $db->prepare('SELECT * FROM `user` WHERE username=? ');
+
+    $verifyuser->bind_param("s", $username);
 
     $result = $verifyuser->execute();
+    echo json_encode((array($result)));
+    echo "////////";
+
 
     if (!$result) {
-        login_fail("1");
+        echo "ERROR: Trying to verify user";
+        return;
     }
 
-    $result = $verifyuser->get_result();
+    $user = $verifyuser->get_result();
 
-    if (!$result) {
-        login_fail("2");
+    if (!$user) {
+
+        echo "ERROR: Trying to get result from db";
+        return;
     }
 
-    $data = $result->fetch_assoc();
+    $user = $user->fetch_assoc();
 
-    if ($data) {
-        if (password_verify($password, $data["pass"])) {
-            $_SESSION["username"] = $data["username"];
-            login_ok();
+    if (isset($user) && sizeof($user) > 0) {
+        //echo var_dump($_POST);
+        //echo var_dump($user);
+
+        if (password_verify($password, $user["pass"])) {
+            $_SESSION["username"] = $user["username"];
+            header("Location: /projecto_a");
         } else {
-            login_fail("3");
+            echo "Password incorrecta";
         }
     } else {
-        login_fail();
+        echo "O utilizador não existe";
     }
 }
 
-function login_ok()
-{
-    echo json_encode(array("message", "ok"));
-    exit;
+//O que significa $_ => Variáveis do tipo SuperGlobal
+if (isset($_GET["logout"])) {
+    session_destroy();
+    header("Location: /projecto_a");
 }
 
-function login_fail($code = 0)
-{
-    echo json_encode(array("message", "error trying to login (code $code)"));
-    exit;
-}
+
+// function user_loggedin()
+// {
+//     if (isset($_SESSION) && isset($_SESSION["username"])) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//     require("connectbase.php");
+
+//     $email = $username;
+//     $verifyuser = $db->prepare("SELECT * FROM `user` WHERE username=? OR email=?;");
+
+//     $verifyuser->bind_param('ss', $username, $email);
+
+//     $result = $verifyuser->execute();
+
+//     echo json_encode((array($verifyuser)));
+
+//     if (!$result) {
+//         echo ("ola");
+//         login_fail("1");
+//     }
+
+
+//     $user = $verifyuser->get_result();
+//     if (!$user) {
+//         login_fail("2");
+//     }
+
+//     $data = $user->fetch_assoc();
+
+//     if ($data) {
+//         if (password_verify($password, $data["pass"])) {
+//             $_SESSION["username"] = $data["username"];
+//             login_ok();
+//         } else {
+//             login_fail("3");
+//         }
+//     } else {
+//         login_fail();
+//     }
+// }
+
+// function login_ok()
+// {
+//     echo json_encode(array("message", "ok"));
+//     exit;
+// }
+
+// function login_fail($code = 0)
+// {
+
+//     echo json_encode(array("message", "error trying to login (code $code)"));
+//     exit;
+// }
