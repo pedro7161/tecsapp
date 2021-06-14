@@ -8,9 +8,12 @@ function login($username, $password)
 
     //Verificação se os campos username e pass foram realmente enviados
     echo $username;
+    $onlinne = $username;
+    global $onlinne;
     // $username = $_POST["username"]; usar no functions.php para funcionar
     // $password = $_POST["password"];
-    $verifyuser = $db->prepare('SELECT * FROM `user` WHERE username=? ');
+    echo $username;
+    $verifyuser = $db->prepare("SELECT * FROM `Cliente` WHERE nome=?;");
 
     $verifyuser->bind_param("s", $username);
 

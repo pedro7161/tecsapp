@@ -4,9 +4,9 @@ function registo($user, $email, $pass, $c_confirm, $contact)
 {
     require("connectbase.php");
     // $pass = password_hash($_POST["password"], PASSWORD_DEFAULT);
-    $newuserquery = $db->prepare("INSERT INTO `user`(`username`,`pass`,`email`,`contact`) VALUES (?,?,?,?)");
+    $newuserquery = $db->prepare("INSERT INTO `cliente` (`nome`,`email`,`contacto`,`password`) VALUES (?,?,?,?)");
 
-    $newuserquery->bind_param("ssss", $user, $pass, $email, $contact);
+    $newuserquery->bind_param("ssss", $user, $email, $contact, $pass);
 
     if ($pass == $c_confirm) {
         $pass = password_hash($_POST["password"], PASSWORD_DEFAULT);

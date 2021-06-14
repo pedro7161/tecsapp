@@ -30,12 +30,13 @@ if (
 if (isset($_POST["username"]) && isset($_POST["password"])) {
 
     // login($_POST["username"], $_POST["password"]);
-    echo $username;
+
     $username = $_POST["username"];
     $password = $_POST["password"];
-    $verifyuser = $db->prepare('SELECT * FROM `user` WHERE username=? OR email=?;');
+    echo $username;
+    $verifyuser = $db->prepare('SELECT * FROM `cliente` WHERE nome=?;');
 
-    $verifyuser->bind_param("ss", $username, $username);
+    $verifyuser->bind_param("s", $username);
 
     $result = $verifyuser->execute();
 
@@ -58,9 +59,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
         //echo var_dump($_POST);
         //echo var_dump($user);
 
-        if (password_verify($password, $user["pass"])) {
+        if (password_verify($password, $user["password"])) {
             $_SESSION["username"] = $user["username"];
-            header("Location: /projecto_a");
+            header("Location: \Project_Final\chat.html");
         } else {
             echo "Password incorrecta";
         }

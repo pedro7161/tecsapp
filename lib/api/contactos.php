@@ -4,7 +4,7 @@ function getcontacts($term)
 {
     require("connectbase.php");
     $query = $db->prepare(
-        "SELECT `username` FROM `user` WHERE contact LIKE CONCAT('%',?,'%') or username LIKE CONCAT('%',?,'%'); "
+        "SELECT `nome` FROM `cliente` WHERE contacto LIKE CONCAT('%',?,'%') or nome LIKE CONCAT('%',?,'%'); "
     );
 
     $query->bind_param("is", $term, $term);
@@ -25,25 +25,23 @@ function getcontacts($term)
     // $return = [];
     // echo $return;
 }
-function addContact($term)
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function addContact($user)
 {
     require("connectbase.php");
+    echo $onlinne;
     $query = $db->prepare(
-        "INSERT `username` FROM `user` WHERE contact LIKE CONCAT('%',?,'%') or username LIKE CONCAT('%',?,'%'); "
+        "SELECT ID from `cliente` where nome=?"
     );
 
-    $query->bind_param("is", $term, $term);
-    $query->execute();
-    // $query->store_result();
-    $query->bind_result($username);
-    // $return = [];
-
-    // $query->fetch();
-    while ($query->fetch()) {
-        $nomes[] = array("username" => $username);
-    }
-    echo json_encode($nomes);
+    $query2 = $db->prepare(
+        "INSERT INTO  `contactos` () VALUES() "
+    );
+    $query3 = $db->prepare(
+        "SELECT ID from `cliente` where nome=?"
+    );
 }
+
 
 // function getcontacts($term)
 // {
