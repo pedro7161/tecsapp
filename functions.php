@@ -92,3 +92,8 @@ if (isset($_GET["action"]) && $_GET["action"] == "getcontacts") {
         getcontacts($_GET["term"]);
     }
 }
+if (isset($_GET["action"]) && $_GET["action"] == "addContacts") {
+    if (isset($_GET["user"])) {
+        addContact($_GET["user"]);
+    }
+}

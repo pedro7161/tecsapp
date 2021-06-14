@@ -1,0 +1,36 @@
+create database `whats`;
+CREATE TABLE Cliente (
+    ID int AUTO INCREMENT PRIMARY KEY,
+    nome varchar(255) NOT NULL,
+    email varchar(255) NOT NULL,
+    contacto INT NOT NULL,
+    password varchar(255) NOT NULL,
+    isactivated NUMBER(1),
+    isonline NUMBER(1) NOT NULL
+      
+);
+CREATE TABLE Mensagens (
+    ID int AUTO INCREMENT PRIMARY KEY,
+    body varchar(255),
+    read NUMBER(1),
+    type varchar(255),
+    id_sender int,        
+    id_receiver int,    
+   database datetime
+     
+);
+CREATE TABLE Contactos (
+    ID int AUTO INCREMENT PRIMARY KEY,      
+    ID_Friend int,                       
+    ID_Client int                           
+);
+
+ALTER TABLE Mensagens
+ADD FOREIGN KEY (id_sender) REFERENCES Cliente(ID); 
+ALTER TABLE Mensagens
+ADD FOREIGN KEY (id_receiver) REFERENCES Cliente(ID); 
+
+ALTER TABLE Contactos
+ADD FOREIGN KEY (  ID_Friend) REFERENCES Cliente(ID); 
+ALTER TABLE Contactos
+ADD FOREIGN KEY ( ID_Client) REFERENCES Cliente(ID); 
