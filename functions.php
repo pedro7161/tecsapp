@@ -29,11 +29,19 @@ if (
 // login
 if (isset($_POST["username"]) && isset($_POST["password"])) {
 
-    // login($_POST["username"], $_POST["password"]);
+    // login($_POST["username"], $_POST["password"]); por alguma razao a variavel vai root0 e nao encontra o utelizador porque nao existe um utelizador root'
 
     $username = $_POST["username"];
     $password = $_POST["password"];
+    $onlinne = $username;
+    echo $onlinne;
     echo $username;
+    $meteron = $db->prepare("UPDATE cliente SET isonline = '1' WHERE nome=?; ");
+    $meteron->bind_param("s", $username);
+    $meteron->execute();
+    $meteroff = $db->prepare("UPDATE cliente SET isonline = '0' WHERE NOT nome=?; ");
+    $meteroff->bind_param("s", $username);
+    $meteroff->execute();
     $verifyuser = $db->prepare('SELECT * FROM `cliente` WHERE nome=?;');
 
     $verifyuser->bind_param("s", $username);
@@ -93,8 +101,9 @@ if (isset($_GET["action"]) && $_GET["action"] == "getcontacts") {
         getcontacts($_GET["term"]);
     }
 }
-if (isset($_GET["action"]) && $_GET["action"] == "addContacts") {
+if (isset($_GET["action"]) && $_GET["action"] == "addContact") {
     if (isset($_GET["user"])) {
+
         addContact($_GET["user"]);
     }
 }

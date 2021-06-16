@@ -4,23 +4,22 @@
 function login($username, $password)
 {
     require("connectbase.php");
-    //Operação de Login
-
-    //Verificação se os campos username e pass foram realmente enviados
-    echo $username;
-    $onlinne = $username;
-    global $onlinne;
-    // $username = $_POST["username"]; usar no functions.php para funcionar
+    // $username = $_POST["username"];
     // $password = $_POST["password"];
+
+    echo $onlinne;
     echo $username;
-    $verifyuser = $db->prepare("SELECT * FROM `Cliente` WHERE nome=?;");
+    $meteron = $db->prepare("UPDATE cliente SET isonline = '1' WHERE nome=?; ");
+    $meteron->bind_param("s", $username);
+    $meteron->execute();
+    $meteroff = $db->prepare("UPDATE cliente SET isonline = '0' WHERE NOT nome=?; ");
+    $meteroff->bind_param("s", $username);
+    $meteroff->execute();
+    $verifyuser = $db->prepare('SELECT * FROM `cliente` WHERE nome=?;');
 
     $verifyuser->bind_param("s", $username);
 
     $result = $verifyuser->execute();
-    echo json_encode((array($result)));
-    echo "////////";
-
 
     if (!$result) {
         echo "ERROR: Trying to verify user";
@@ -41,9 +40,9 @@ function login($username, $password)
         //echo var_dump($_POST);
         //echo var_dump($user);
 
-        if (password_verify($password, $user["pass"])) {
+        if (password_verify($password, $user["password"])) {
             $_SESSION["username"] = $user["username"];
-            header("Location: /projecto_a");
+            header("Location: \Project_Final\chat.html");
         } else {
             echo "Password incorrecta";
         }
