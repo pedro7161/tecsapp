@@ -51,13 +51,25 @@ function login($username, $password)
     }
 }
 
-//O que significa $_ => Variáveis do tipo SuperGlobal
-if (isset($_GET["logout"])) {
-    session_destroy();
-    header("Location: /projecto_a");
+function GetLoggedUser()
+{
+    require("connectbase.php");
+    $query = $db->prepare(
+        "SELECT * from `cliente` where isonline='1';"
+    );
+
+    $result = $query->execute();
+    if (!$result) {
+        $msginf[] = array("message" => "no messages");
+        echo json_encode($msginf);
+        return;
+    }
+
+    $online = $query->get_result();
+    $online = $online->fetch_assoc();
+    $msginf[] = array("username" => $online["nome"], "message" => "ok");
+    echo json_encode($msginf);
 }
-
-
 // function user_loggedin()
 // {
 //     if (isset($_SESSION) && isset($_SESSION["username"])) {

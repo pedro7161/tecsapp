@@ -75,20 +75,43 @@ function addContact($user)
     ////////////////////////////////////////////////////////////////////
 
 
+    // bind param nao funciona nem com SS nem com II            S=string i=integer
+    //o erro provavel dever ser no sql em si para conseguir inserir a hora local exata
 
     $query3 = $db->prepare(
-        "INSERT INTO  `mensagens` (body,ler, 'type',id_sender,id_receiver,'date') VALUES('Hi!!','0','enviado','?','?',CURRENT_TIMESTAMP) "
+        "INSERT INTO  `mensagens` (body,ler,type,id_cliente,date) VALUES('Hi!!','0','sent',?,CURRENT_TIMESTAMP()); "
     );
-    $eu = $online["ID"];
-    $friend = $user["ID"];
-    $query3->bind_param("ii", $eu, $friend);
-    $result = $query3->execute();
+
+    $query3->bind_param("i", $online["ID"]);
+    $query3->execute();
+    $teste = $query3->get_result();
+    echo $teste;
     if (!$result) {
-        echo "ERROR: Trying to send message to user";
+        $enviado[] = array("message" => "add contact failed!");
+        echo json_encode($enviado);
         return;
     }
     $enviado[] = array("message" => "Contact added sucessfully");
+    $query3again = $db->prepare(
+        "INSERT INTO  `mensagens` (body,ler,type,id_cliente,date) VALUES('Hi!!','0','received',?,CURRENT_TIMESTAMP()); "
+    );
+
+    $query3again->bind_param("i", $user["ID"]);
+    $query3again->execute();
     echo json_encode($enviado);
+
+    // $checkenviado = $db->prepare(
+    //     "SELECT * from mensagens where = "
+    // );
+
+    // $checkenviado->bind_param("ss",  $user["ID"], $online["ID"],);
+    // $checkenviado->execute();
+    // $checkenviado = $db->prepare(
+    //     "INSERT INTO  `mensagens` (body,ler,type,id_sender,id_receiver,date) VALUES('Hi!!','0','received',?,?,CURRENT_TIMESTAMP()); "
+    // );
+
+    // $recebido->bind_param("ss",  $user["ID"], $online["ID"],);
+    // $recebido->execute();
 }
 
 

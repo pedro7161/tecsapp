@@ -14,9 +14,8 @@ CREATE TABLE Mensagens (
     body varchar(255),
     ler tinyint,
     type varchar(254),
-    id_sender int,        
-    id_receiver int,    
-    date datetime
+    id_cliente int,        
+    date timestamp
      
 );
 CREATE TABLE Contactos (
@@ -26,9 +25,8 @@ CREATE TABLE Contactos (
 );
 
 ALTER TABLE Mensagens
-ADD FOREIGN KEY (id_sender) REFERENCES Cliente(ID); 
-ALTER TABLE Mensagens
-ADD FOREIGN KEY (id_receiver) REFERENCES Cliente(ID); 
+ADD FOREIGN KEY (id_cliente) REFERENCES Cliente(ID); 
+
 
 ALTER TABLE Contactos
 ADD FOREIGN KEY (  ID_Friend) REFERENCES Cliente(ID); 

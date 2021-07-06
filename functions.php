@@ -5,6 +5,7 @@
 require("connectbase.php");
 require("lib/api/login.php");
 require("lib/api/registo.php");
+require("lib/api/mensagens.php");
 require("lib\api\contactos.php");
 session_start();
 
@@ -27,6 +28,7 @@ if (
 }
 
 // login
+// o login nao funciona em funçao  devido a perder-se o valor do username
 if (isset($_POST["username"]) && isset($_POST["password"])) {
 
     // login($_POST["username"], $_POST["password"]); por alguma razao a variavel vai root0 e nao encontra o utelizador porque nao existe um utelizador root'
@@ -106,4 +108,22 @@ if (isset($_GET["action"]) && $_GET["action"] == "addContact") {
 
         addContact($_GET["user"]);
     }
+}
+
+if (isset($_GET["action"]) && $_GET["action"] == "getMessages") {
+    getMessages();
+}
+if (isset($_GET["action"]) && $_GET["action"] == "getChat") {
+    if (isset($_GET["user"])) {
+        getChat($_GET["user"]);
+    }
+}
+
+if (isset($_POST["action"]) && $_POST["action"] == "sendMessage") {
+    if (isset($_POST["body"]) && isset($_POST["user"])) {
+        sendMessage($_POST["body"], $_POST["user"]);
+    }
+}
+if (isset($_GET["action"]) && $_GET["action"] == "getLoggedUser") {
+    GetLoggedUser();
 }
